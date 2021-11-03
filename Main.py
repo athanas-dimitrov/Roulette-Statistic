@@ -58,13 +58,46 @@ labels_18x2: List[Label] = list()  # Списък на етикетите със
 buttons_calc: List[Button] = list()
 lines: List[str] = list()  # Списък на Числата във файлът със статистиката като символи
 stats: List[int] = list()  # Списък на Числата във файлът със статистиката
-counts: List[List[int]] = [[0] * 37, [0] * 37]  # Списък от числата и броят на повявата им при теглене
+counts: List[List[int]] = [[0] * 37, [0] * 37]  # Списък от числата и броят на появата им при теглене
 nine_4th_num: List[List[List[int]]] = [[[1, 4, 7, 10], [2, 5, 8, 11], [3, 6, 9, 12]],
                                        [[13, 16, 19, 22], [14, 17, 20, 23], [15, 18, 21, 24]],
                                        [[25, 28, 31, 34], [26, 29, 32, 35], [27, 30, 33, 36]]]
 nine_4th: List[List[List[None]]] = [[[None] * 4, [None] * 4, [None] * 4],
                                     [[None] * 4, [None] * 4, [None] * 4],
                                     [[None] * 4, [None] * 4, [None] * 4]]
+
+
+def n_group_2_3list(group, n):
+    for key, value in group.items():
+        group[key][1] = [len(value[0])]
+        if len(stats) > 0:
+            group[key][1].append(round(((group[key][1][0]) * 37 * 100 / (n * len(stats)) - 100), 2))
+        for p in range(len(value[0]) - 1):
+            if group[key][0][p + 1] - group[key][0][p] == 1:
+                group[key][2][0] = group[key][2][0] + 1
+    return group
+
+
+def n_group_4list(group):
+    for key in group.keys():  # Записва в четвъртият лист пермутацията на групата в статистиката
+        if len(group[key][0]) > 0:
+            for q in group[key][0][0:]:
+                r = group[key][0].index(q)
+                if r > 0:
+                    if group[key][0][r - 1] - q == - 1:
+                        group[key][3][-1] = group[key][3][-1] + 1
+                    else:
+                        group[key][3].extend([group[key][0][r - 1] - q + 1, 1])
+                else:
+                    group[key][3] = [i for i in [-q, 1] if i != 0]
+                if group[key][0][-1] == q < len(stats) - 1:
+                    group[key][3].append(-len(stats) + 1 + group[key][0][-1])
+                else:
+                    pass
+        else:
+            pass
+    return group
+
 
 numbers37: Dict[int, list] = {}
 
@@ -74,22 +107,33 @@ def numbers37_def():
     numbers37.clear()
     numbers37 = dict.fromkeys((p for p in range(37)))  # Речник с позициите на всяко число в статистиката
     for p in range(37):
-        numbers37[p] = [[]] * 2
+        numbers37[p] = [[]] * 4
         numbers37[p][1] = [0]
+        numbers37[p][2] = [0]  # Третият лист е за броят на повторенията на числото в две съседни тегления
+        numbers37[p][3] = [0]
+
     for m in range(len(stats)):
         numbers37[stats[m]][0].append(m)
         numbers37[stats[m]][1] = [len(numbers37[stats[m]][0])]
+        # try:
+        if m < len(stats) - 1 and stats[m] - stats[m + 1] == 0:
+            numbers37[stats[m]][2][0] = numbers37[stats[m]][2][0] + 1
+        # except IndexError:
+        else:
+            pass
     for key in numbers37:  # Записва във вторият лист на втора позиция разликата от нормалното разпределение в проценти
         if len(stats) > 0:
             numbers37[key][1].append(round(((numbers37[key][1][0]) * 37 * 100 / (1 * len(stats)) - 100), 2))
-
+        else:
+            pass
+    n_group_4list(numbers37)
     return numbers37
 
 
 numbers12x3: Dict[str, list] = {}  # Речник за третините по вертикал и хоризонтал
 
 
-def numbers12x3_def():  # Първата стойност е лист от позициите им в статистиката, после е броят на пазоциите в
+def numbers12x3_def():  # Първата стойност е лист от позициите им в статистиката, после е броят на позициите в
     # статистиката
     global numbers12x3, stats  # Третият лист е броят на повторенията в съседни числа от статистиката
     numbers12x3.clear()
@@ -107,35 +151,19 @@ def numbers12x3_def():  # Първата стойност е лист от по�
             (numbers12x3["13-24"][0].append(m))
         elif stats[m] in range(25, 37):
             (numbers12x3["25-36"][0].append(m))
+        else:
+            pass
         if stats[m] in range(1, 37, 3):
             (numbers12x3["1/34"][0].append(m))
         elif stats[m] in range(2, 37, 3):
             (numbers12x3["2/35"][0].append(m))
         elif stats[m] in range(3, 37, 3):
             (numbers12x3["3/36"][0].append(m))
-    for key, value in numbers12x3.items():
-        numbers12x3[key][1] = [len(value[0])]
-        for p in range(len(value[0]) - 1):
-            if numbers12x3[key][0][p + 1] - numbers12x3[key][0][p] == 1:
-                numbers12x3[key][2][0] = numbers12x3[key][2][0] + 1
-    for key in numbers12x3:  # Записва във вторият лист на втора позиция разликата от нормалното разпределение в
-        # проценти
-        if len(stats) > 0:
-            numbers12x3[key][1].append(round(((numbers12x3[key][1][0]) * 37 * 100 / (12 * len(stats)) - 100), 2))
-    for key in numbers12x3.keys():
-        if len(numbers12x3[key][0]) > 0:
-            for q in numbers12x3[key][0][0:]:
-                r = numbers12x3[key][0].index(q)
-                if r > 0:
-                    if numbers12x3[key][0][r - 1] - q == - 1:
-                        numbers12x3[key][3][-1] = numbers12x3[key][3][-1] + 1
-                    else:
-                        numbers12x3[key][3].extend([numbers12x3[key][0][r - 1] - q + 1, 1])
-                else:
-                    numbers12x3[key][3] = [i for i in [-q, 1] if i != 0]
-                if q < len(stats) - 1:
-                    numbers12x3[key][3].append(-len(stats) + 1 + numbers12x3[key][0][-1])
+        else:
+            pass
 
+    n_group_2_3list(numbers12x3, 12)
+    n_group_4list(numbers12x3)
     print(numbers12x3)
     return numbers12x3
 
@@ -170,41 +198,15 @@ def numbers4x9_def():
     numbers4x9[(27, 30, 33, 36)][0] = list(
         sorted(set(numbers12x3["25-36"][0]).intersection(set(numbers12x3["3/36"][0]))))
 
-    for key, value in numbers4x9.items():
-        numbers4x9[key][1] = [len(value[0])]
-        numbers4x9[key][3] = [0]
-        for p in range(len(value[0]) - 1):
-            if numbers4x9[key][0][p + 1] - numbers4x9[key][0][p] == 1:
-                numbers4x9[key][2][0] = numbers4x9[key][2][0] + 1
-    for key in numbers4x9:  # Записва във вторият лист на втора позиция разликата от нормалното разпределение в проценти
-        if len(stats) > 0:
-            numbers4x9[key][1].append(round(((numbers4x9[key][1][0]) * 37 * 100 / (4 * len(stats)) - 100), 2))
-    # print(numbers4x9)
-    for q in range(len(stats)):
-        for key1 in numbers4x9.keys():
-            if stats[q] in key1:
-                if q == 0:
-                    numbers4x9[key1][3][0] = 1
-                else:
-                    if stats[q - 1] in key1:
-                        numbers4x9[key1][3][-1] = numbers4x9[key1][3][-1] + 1
-                    else:
-                        numbers4x9[key1][3].append(1)
-            else:
-                if q == 0:
-                    numbers4x9[key1][3][0] = -1
-                else:
-                    if stats[q - 1] in key1:
-                        numbers4x9[key1][3].append(-1)
-                    else:
-                        numbers4x9[key1][3][-1] = numbers4x9[key1][3][-1] - 1
+    n_group_2_3list(numbers4x9, 4)
+    n_group_4list(numbers4x9)
     return numbers4x9
 
 
 numbers18x2: Dict[str, list] = {}  # Речник за половините
 
 
-def numbers18x2_def() -> object:  # Първата стойност е лист от позициите им в статистиката, после е броят на пазоциите в
+def numbers18x2_def() -> object:  # Първата стойност е лист от позициите им в статистиката, после е броят на позициите в
     # статистиката
     global numbers18x2, stats  # Третият лист е броят на повторенията в съседни числа от статистиката
     numbers18x2.clear()
@@ -220,36 +222,23 @@ def numbers18x2_def() -> object:  # Първата стойност е лист 
             (numbers18x2["1-18"][0].append(p))
         elif stats[p] in range(19, 37):
             (numbers18x2["19-36"][0].append(p))
+        else:
+            pass
         if stats[p] in range(1, 37, 2):
             (numbers18x2["1/35"][0].append(p))
         elif stats[p] in range(2, 37, 2):
             (numbers18x2["2/36"][0].append(p))
+        else:
+            pass
         if stats[p] in red_numbers:
             (numbers18x2["red"][0].append(p))
         elif stats[p] in black_numbers:
             (numbers18x2["black"][0].append(p))
-    for key, value in numbers18x2.items():
-        numbers18x2[key][1] = [len(value[0])]
-        for p in range(len(value[0]) - 1):
-            if numbers18x2[key][0][p + 1] - numbers18x2[key][0][p] == 1:
-                numbers18x2[key][2][0] = numbers18x2[key][2][0] + 1
-    for key in numbers18x2:  # Записва във вторият лист на втора позиция разликата от нормалното разпределение в
-        # проценти
-        if len(stats) > 0:
-            numbers18x2[key][1].append(round(((numbers18x2[key][1][0]) * 37 * 100 / (18 * len(stats)) - 100), 2))
-    for key in numbers18x2.keys():
-        if len(numbers18x2[key][0]) > 0:
-            for q in numbers18x2[key][0][0:]:
-                r = numbers18x2[key][0].index(q)
-                if r > 0:
-                    if numbers18x2[key][0][r - 1] - q == - 1:
-                        numbers18x2[key][3][-1] = numbers18x2[key][3][-1] + 1
-                    else:
-                        numbers18x2[key][3].extend([numbers18x2[key][0][r - 1] - q + 1, 1])
-                else:
-                    numbers18x2[key][3] = [i for i in [-q, 1] if i != 0]
-                if q < len(stats) - 1:
-                    numbers18x2[key][3].append(-len(stats) + 1 + numbers18x2[key][0][-1])
+        else:
+            pass
+
+    n_group_2_3list(numbers18x2, 18)
+    n_group_4list(numbers18x2)
     print(numbers18x2)
     return numbers18x2
 
@@ -280,6 +269,8 @@ def numbers9x4_def() -> object:
             numbers9x4['19-27'][0].append(q)
         elif stats[q] in range(28, 37):
             numbers9x4['28-36'][0].append(q)
+        else:
+            pass
         if stats[q] in set(range(1, 19)).intersection(set(range(1, 37, 2))):
             numbers9x4['1-18/odd'][0].append(q)
         elif stats[q] in set(range(1, 19)).intersection(set(range(2, 37, 2))):
@@ -288,6 +279,8 @@ def numbers9x4_def() -> object:
             numbers9x4['19-36/odd'][0].append(q)
         elif stats[q] in set(range(19, 37)).intersection(set(range(2, 37, 2))):
             numbers9x4['19-36/even'][0].append(q)
+        else:
+            pass
         if stats[q] in set(range(1, 19)).intersection(set(red_numbers)):
             numbers9x4['1-18/red'][0].append(q)
         elif stats[q] in set(range(1, 19)).intersection(set(black_numbers)):
@@ -296,6 +289,8 @@ def numbers9x4_def() -> object:
             numbers9x4['19-36/red'][0].append(q)
         elif stats[q] in set(range(19, 37)).intersection(set(black_numbers)):
             numbers9x4['19-36/black'][0].append(q)
+        else:
+            pass
         if stats[q] in set(range(1, 37, 2)).intersection(set(red_numbers)):
             numbers9x4['odd/red'][0].append(q)
         elif stats[q] in set(range(1, 37, 2)).intersection(set(black_numbers)):
@@ -304,28 +299,11 @@ def numbers9x4_def() -> object:
             numbers9x4['even/red'][0].append(q)
         elif stats[q] in set(range(2, 37, 2)).intersection(set(black_numbers)):
             numbers9x4['even/black'][0].append(q)
-    for key, value in numbers9x4.items():
-        numbers9x4[key][1] = [len(value[0])]
-        for p in range(len(value[0]) - 1):
-            if numbers9x4[key][0][p + 1] - numbers9x4[key][0][p] == 1:
-                numbers9x4[key][2][0] = numbers9x4[key][2][0] + 1
-    for key in numbers9x4:  # Записва във вторият лист на втора позиция разликата от нормалното разпределение в
-        # проценти
-        if len(stats) > 0:
-            numbers9x4[key][1].append(round(((numbers9x4[key][1][0]) * 37 * 100 / (9 * len(stats)) - 100), 2))
-    for key in numbers9x4.keys():
-        if len(numbers9x4[key][0]) > 0:
-            for q in numbers9x4[key][0][0:]:
-                r = numbers9x4[key][0].index(q)
-                if r > 0:
-                    if numbers9x4[key][0][r - 1] - q == - 1:
-                        numbers9x4[key][3][-1] = numbers9x4[key][3][-1] + 1
-                    else:
-                        numbers9x4[key][3].extend([numbers9x4[key][0][r - 1] - q + 1, 1])
-                else:
-                    numbers9x4[key][3] = [i for i in [-q, 1] if i != 0]
-                if q < len(stats) - 1:
-                    numbers9x4[key][3].append(-len(stats) + 1 + numbers9x4[key][0][-1])
+        else:
+            pass
+
+    n_group_2_3list(numbers9x4, 9)
+    n_group_4list(numbers9x4)
     return numbers9x4
 
 
@@ -365,6 +343,8 @@ def numbers6x6_def() -> object:
             numbers6x6['25-30'][0].append(q)
         elif stats[q] in range(31, 37):
             numbers6x6['31-36'][0].append(q)
+        else:
+            pass
         if stats[q] in set(range(1, 19)).intersection(set(range(1, 37, 3))):
             numbers6x6['1/16'][0].append(q)
         elif stats[q] in set(range(1, 19)).intersection(set(range(2, 37, 3))):
@@ -377,6 +357,8 @@ def numbers6x6_def() -> object:
             numbers6x6['20/35'][0].append(q)
         elif stats[q] in set(range(19, 37)).intersection(set(range(3, 37, 3))):
             numbers6x6['21/36'][0].append(q)
+        else:
+            pass
         if stats[q] in set(range(1, 13)).intersection(set(range(1, 37, 2))):
             numbers6x6['1-12/odd'][0].append(q)
         elif stats[q] in set(range(1, 13)).intersection(set(range(2, 37, 2))):
@@ -389,6 +371,8 @@ def numbers6x6_def() -> object:
             numbers6x6['25-36/odd'][0].append(q)
         elif stats[q] in set(range(25, 37)).intersection(set(range(2, 37, 2))):
             numbers6x6['25-36/even'][0].append(q)
+        else:
+            pass
         if stats[q] in set(range(1, 13)).intersection(set(red_numbers)):
             numbers6x6['1-12/red'][0].append(q)
         elif stats[q] in set(range(1, 13)).intersection(set(black_numbers)):
@@ -401,6 +385,8 @@ def numbers6x6_def() -> object:
             numbers6x6['25-36/red'][0].append(q)
         elif stats[q] in set(range(25, 37)).intersection(set(black_numbers)):
             numbers6x6['25-36/black'][0].append(q)
+        else:
+            pass
         if stats[q] in set(range(1, 37, 3)).intersection(set(range(1, 37, 2))):
             numbers6x6['1/34-odd'][0].append(q)
         elif stats[q] in set(range(1, 37, 3)).intersection(set(range(2, 37, 2))):
@@ -413,6 +399,8 @@ def numbers6x6_def() -> object:
             numbers6x6['3/36-odd'][0].append(q)
         elif stats[q] in set(range(3, 37, 3)).intersection(set(range(2, 37, 2))):
             numbers6x6['3/36-even'][0].append(q)
+        else:
+            pass
         if stats[q] in set(range(1, 37, 3)).intersection(set(red_numbers)):
             numbers6x6['1/34-red'][0].append(q)
         elif stats[q] in set(range(1, 37, 3)).intersection(set(black_numbers)):
@@ -425,33 +413,20 @@ def numbers6x6_def() -> object:
             numbers6x6['3/36-red'][0].append(q)
         elif stats[q] in set(range(3, 37, 3)).intersection(set(black_numbers)):
             numbers6x6['3/36-black'][0].append(q)
-    for key, value in numbers6x6.items():
-        numbers6x6[key][1] = [len(value[0])]
-        for p in range(len(value[0]) - 1):
-            if numbers6x6[key][0][p + 1] - numbers6x6[key][0][p] == 1:
-                numbers6x6[key][2][0] = numbers6x6[key][2][0] + 1
+        else:
+            pass
+
+    n_group_2_3list(numbers6x6, 6)
     for key in numbers6x6:  # Записва във вторият лист на втора позиция разликата от нормалното разпределение в
         # проценти
         if len(stats) > 0:
             if key == '2/35-red' or key == '3/36-black':
-                numbers6x6[key][1].append(round(((numbers6x6[key][1][0]) * 37 * 100 / (4 * len(stats)) - 100), 2))
+                numbers6x6[key][1][1] = (round(((numbers6x6[key][1][0]) * 37 * 100 / (4 * len(stats)) - 100), 2))
             elif key == '2/35-black' or key == '3/36-red':
-                numbers6x6[key][1].append(round(((numbers6x6[key][1][0]) * 37 * 100 / (8 * len(stats)) - 100), 2))
+                numbers6x6[key][1][1] = (round(((numbers6x6[key][1][0]) * 37 * 100 / (8 * len(stats)) - 100), 2))
             else:
-                numbers6x6[key][1].append(round(((numbers6x6[key][1][0]) * 37 * 100 / (6 * len(stats)) - 100), 2))
-    for key in numbers6x6.keys():
-        if len(numbers6x6[key][0]) > 0:
-            for q in numbers6x6[key][0][0:]:
-                r = numbers6x6[key][0].index(q)
-                if r > 0:
-                    if numbers6x6[key][0][r - 1] - q == - 1:
-                        numbers6x6[key][3][-1] = numbers6x6[key][3][-1] + 1
-                    else:
-                        numbers6x6[key][3].extend([numbers6x6[key][0][r - 1] - q + 1, 1])
-                else:
-                    numbers6x6[key][3] = [i for i in [-q, 1] if i != 0]
-                if q < len(stats) - 1:
-                    numbers6x6[key][3].append(-len(stats) + 1 + numbers6x6[key][0][-1])
+                pass
+    n_group_4list(numbers6x6)
     return numbers6x6
 
 
@@ -486,34 +461,10 @@ def numbers3x12_def() -> object:
         for key in numbers3x12.keys():
             if stats[q] in key:
                 numbers3x12[key][0].append(q)
-    for key, value in numbers3x12.items():
-        numbers3x12[key][1] = [len(value[0])]
-        for p in range(len(value[0]) - 1):
-            if numbers3x12[key][0][p + 1] - numbers3x12[key][0][p] == 1:
-                numbers3x12[key][2][0] = numbers3x12[key][2][0] + 1
-    for key in numbers3x12:  # Записва във вторият лист на втора позиция разликата от нормалното разпределение в
-        # проценти
-        if len(stats) > 0:
-            numbers3x12[key][1].append(round(((numbers3x12[key][1][0]) * 37 * 100 / (3 * len(stats)) - 100), 2))
-    for q in range(len(stats)):
-        for key1 in numbers3x12.keys():
-            if stats[q] in key1:
-                if q == 0:
-                    numbers3x12[key1][3][0] = 1
-                else:
-                    if stats[q - 1] in key1:
-                        numbers3x12[key1][3][-1] = numbers3x12[key1][3][-1] + 1
-                    else:
-                        numbers3x12[key1][3].append(1)
             else:
-                if q == 0:
-                    numbers3x12[key1][3][0] = -1
-                else:
-                    if stats[q - 1] in key1:
-                        numbers3x12[key1][3].append(-1)
-                    else:
-                        numbers3x12[key1][3][-1] = numbers3x12[key1][3][-1] - 1
-
+                pass
+    n_group_2_3list(numbers3x12, 3)
+    n_group_4list(numbers3x12)
     return numbers3x12
 
 
@@ -544,34 +495,8 @@ def numbers2x18_def() -> object:
         for key in numbers2x18.keys():
             if stats[q] in key:
                 numbers2x18[key][0].append(q)
-    for key, value in numbers2x18.items():
-        numbers2x18[key][1] = [len(value[0])]
-        for p in range(len(value[0]) - 1):
-            if numbers2x18[key][0][p + 1] - numbers2x18[key][0][p] == 1:
-                numbers2x18[key][2][0] = numbers2x18[key][2][0] + 1
-    for key in numbers2x18:  # Записва във вторият лист на втора позиция разликата от нормалното разпределение в
-        # проценти
-        if len(stats) > 0:
-            numbers2x18[key][1].append(round(((numbers2x18[key][1][0]) * 37 * 100 / (2 * len(stats)) - 100), 2))
-    for q in range(len(stats)):
-        for key1 in numbers2x18.keys():
-            if stats[q] in key1:
-                if q == 0:
-                    numbers2x18[key1][3][0] = 1
-                else:
-                    if stats[q - 1] in key1:
-                        numbers2x18[key1][3][-1] = numbers2x18[key1][3][-1] + 1
-                    else:
-                        numbers2x18[key1][3].append(1)
-            else:
-                if q == 0:
-                    numbers2x18[key1][3][0] = -1
-                else:
-                    if stats[q - 1] in key1:
-                        numbers2x18[key1][3].append(-1)
-                    else:
-                        numbers2x18[key1][3][-1] = numbers2x18[key1][3][-1] - 1
-
+    n_group_2_3list(numbers2x18, 2)
+    n_group_4list(numbers2x18)
     return numbers2x18
 
 
