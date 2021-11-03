@@ -75,6 +75,9 @@ def n_group_2_3list(group, n):  # Записва във вторият лист 
         for p in range(len(value[0]) - 1):
             if group[key][0][p + 1] - group[key][0][p] == 1:
                 group[key][2][0] = group[key][2][0] + 1
+    for key in group.keys():
+        if len(stats) > 0:
+            group[key][2].append(round(group[key][2][0] * 37 * 37 * 100 / (n * n * len(stats)) - 100, 2))
     return group
 
 
@@ -121,11 +124,8 @@ def numbers37_def():
         # except IndexError:
         else:
             pass
-    for key in numbers37:  # Записва във вторият лист на втора позиция разликата от нормалното разпределение в проценти
-        if len(stats) > 0:
-            numbers37[key][1].append(round(((numbers37[key][1][0]) * 37 * 100 / (1 * len(stats)) - 100), 2))
-        else:
-            pass
+    
+    n_group_2_3list(numbers37, 1)
     n_group_4list(numbers37)
     return numbers37
 
