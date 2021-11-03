@@ -67,8 +67,8 @@ nine_4th: List[List[List[None]]] = [[[None] * 4, [None] * 4, [None] * 4],
                                     [[None] * 4, [None] * 4, [None] * 4]]
 
 
-def n_group_2_3list(group, n):
-    for key, value in group.items():
+def n_group_2_3list(group, n):  # Записва във вторият лист броят на появата в статистиката и процентите
+    for key, value in group.items():  # В третият лист е броят на съседни появи в статистиката
         group[key][1] = [len(value[0])]
         if len(stats) > 0:
             group[key][1].append(round(((group[key][1][0]) * 37 * 100 / (n * len(stats)) - 100), 2))
@@ -79,7 +79,7 @@ def n_group_2_3list(group, n):
 
 
 def n_group_4list(group):
-    for key in group.keys():  # Записва в четвъртият лист пермутацията на групата в статистиката
+    for key in group.keys():  # Записва в четвъртият лист пермутацията на групата в статистиката 
         if len(group[key][0]) > 0:
             for q in group[key][0][0:]:
                 r = group[key][0].index(q)
