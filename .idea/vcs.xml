@@ -4,6 +4,5 @@
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Roulette" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Roulette-Statistic" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/Roulette-Statistic-1" vcs="Git" />
   </component>
 </project>
