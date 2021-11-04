@@ -72,12 +72,18 @@ def n_group_2_3list(group, n):  # Записва във вторият лист 
         group[key][1] = [len(value[0])]
         if len(stats) > 0:
             group[key][1].append(round(((group[key][1][0]) * 37 * 100 / (n * len(stats)) - 100), 2))
+        else:
+            pass
         for p in range(len(value[0]) - 1):
             if group[key][0][p + 1] - group[key][0][p] == 1:
                 group[key][2][0] = group[key][2][0] + 1
+            else:
+                pass
     for key in group.keys():
         if len(stats) > 0:
             group[key][2].append(round(group[key][2][0] * 37 * 37 * 100 / (n * n * len(stats)) - 100, 2))
+        else:
+            pass
     return group
 
 
@@ -118,13 +124,7 @@ def numbers37_def():
     for m in range(len(stats)):
         numbers37[stats[m]][0].append(m)
         numbers37[stats[m]][1] = [len(numbers37[stats[m]][0])]
-        # try:
-        if m < len(stats) - 1 and stats[m] - stats[m + 1] == 0:
-            numbers37[stats[m]][2][0] = numbers37[stats[m]][2][0] + 1
-        # except IndexError:
-        else:
-            pass
-    
+
     n_group_2_3list(numbers37, 1)
     n_group_4list(numbers37)
     return numbers37
@@ -164,7 +164,6 @@ def numbers12x3_def():  # Първата стойност е лист от по�
 
     n_group_2_3list(numbers12x3, 12)
     n_group_4list(numbers12x3)
-    print(numbers12x3)
     return numbers12x3
 
 
@@ -177,6 +176,8 @@ def numbers4x9_def():
     for p in range(3):  # Първият лист е позициите на "4-ката" в статистиката, вторият лист е броят й в статистиката
         for j in range(3):  # Третият лист е броят на повторенията при две съседни тегления
             numbers4x9[tuple(nine_4th_num[p][j])] = [[]] + [[0]] * 3  # Създава речник с ключове 9 "4-ки"
+    for q in range(9):
+        numbers4x9[(1 + 4 * q, 2 + 4 * q, 3 + 4 * q, 4 + 4 * q)] = [[]] + [[0]] * 3
     for key in numbers4x9.keys():
         numbers4x9[key][0] = []
         numbers4x9[key][1] = [0]
@@ -197,6 +198,13 @@ def numbers4x9_def():
         sorted(set(numbers12x3["25-36"][0]).intersection(set(numbers12x3["2/35"][0]))))
     numbers4x9[(27, 30, 33, 36)][0] = list(
         sorted(set(numbers12x3["25-36"][0]).intersection(set(numbers12x3["3/36"][0]))))
+    for r in range(len(stats)):
+        for key in list(numbers4x9.keys())[9:]:
+            if stats[r] in key:
+                numbers4x9[key][0].append(r)
+            else:
+                pass
+            # print(key)
 
     n_group_2_3list(numbers4x9, 4)
     n_group_4list(numbers4x9)
@@ -239,7 +247,6 @@ def numbers18x2_def() -> object:  # Първата стойност е лист 
 
     n_group_2_3list(numbers18x2, 18)
     n_group_4list(numbers18x2)
-    print(numbers18x2)
     return numbers18x2
 
 
@@ -561,13 +568,13 @@ def statistic_update():
     numbers3x12_def()
     numbers2x18_def()
 
-    print(numbers9x4)
     # print(numbers4x9.items())
     # print(lines)
     print(numbers37)
     print(numbers12x3)
     print(numbers4x9)
     print(numbers18x2)
+    print(numbers9x4)
     print(numbers6x6)
     print(numbers3x12)
     print(numbers2x18)
