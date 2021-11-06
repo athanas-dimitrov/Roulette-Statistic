@@ -584,6 +584,7 @@ def statistic_update():
     print(numbers2x18)
     print(math.comb(len(stats), 0))
     print(pow(37, 2))
+    
     # print(tuple(filter(lambda x: (x != 0), numbers6x6['1-6'][3])))
     # labels_def()
     # print(counts)
