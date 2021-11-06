@@ -1,4 +1,5 @@
 # Import module
+import math
 import os
 from random import *
 from tkinter import *
@@ -71,6 +72,9 @@ def n_group_2_3list(group, n):  # Записва във вторият лист 
     for key, value in group.items():  # В третият лист е броят на съседни появи в статистиката
         group[key][1] = [len(value[0])]
         if len(stats) > 0:
+            group[key][1].append(
+                round(math.comb(len(stats), group[key][1][0]) * n ** group[key][1][0] * (37 - n) ** (
+                        len(stats) - group[key][1][0]) * 100 / (37 ** len(stats)), 2))
             group[key][1].append(round(((group[key][1][0]) * 37 * 100 / (n * len(stats)) - 100), 2))
         else:
             pass
@@ -578,6 +582,8 @@ def statistic_update():
     print(numbers6x6)
     print(numbers3x12)
     print(numbers2x18)
+    print(math.comb(len(stats), 0))
+    print(pow(37, 2))
     # print(tuple(filter(lambda x: (x != 0), numbers6x6['1-6'][3])))
     # labels_def()
     # print(counts)
@@ -627,7 +633,7 @@ def labels_4x9_12x3_def() -> object:
             labels_4x9_12x3[q].place(relwidth=0.19, relheight=0.03, relx=0.09, rely=0.424 + 0.03 * (q - 12))
     else:
         k = 0
-        for key in numbers4x9:
+        for key in list(numbers4x9.keys())[0:9]:
             if numbers4x9[key][1][1] > 0:
                 labels_4x9_12x3[k].config(text='+' + str(numbers4x9[key][1][1]) + '%')
                 k = k + 1
@@ -635,7 +641,7 @@ def labels_4x9_12x3_def() -> object:
                 labels_4x9_12x3[k].config(text=str(numbers4x9[key][1][1]) + '%')
                 k = k + 1
         j = 0
-        for key in numbers12x3:
+        for key in list(numbers12x3.keys())[0:9]:
             if numbers12x3[key][1][1] > 0:
                 labels_4x9_12x3[j + 9].config(text='+' + str(numbers12x3[key][1][1]) + '%')
             elif numbers12x3[key][1][1] <= 0:
@@ -660,7 +666,7 @@ def labels_18x2_def():
                                     rely=0.514 + 0.03 * int(round(keys) / 2))
     else:
         k = 0
-        for key in numbers18x2:
+        for key in list(numbers18x2.keys()):
             if numbers18x2[key][1][1] > 0:
                 labels_18x2[k].config(text='+' + str(numbers18x2[key][1][1]) + '%')
                 k = k + 1
