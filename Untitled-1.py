@@ -3,6 +3,7 @@
 # tkinter and ttk module
 from tkinter import *
 from tkinter.ttk import *
+import PyQt5
 
 # creates a Tk() object
 master = Tk()
