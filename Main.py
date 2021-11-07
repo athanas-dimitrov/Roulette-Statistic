@@ -69,12 +69,17 @@ nine_4th: List[List[List[None]]] = [[[None] * 4, [None] * 4, [None] * 4],
 
 
 def n_group_2_3list(group, n):  # Записва във вторият лист броят на появата в статистиката и процентите
+    a = list((math.comb(len(stats), i) * n ** i * (37 - n) ** (len(stats) - i)) for i in range(len(stats)))
+    print(max(a))
     for key, value in group.items():  # В третият лист е броят на съседни появи в статистиката
         group[key][1] = [len(value[0])]
-        if len(stats) > 0:
+        if len(stats) > 0:  # Изчислява вероятността на получилата се комбинация
             group[key][1].append(
                 round(math.comb(len(stats), group[key][1][0]) * n ** group[key][1][0] * (37 - n) ** (
                         len(stats) - group[key][1][0]) * 100 / (37 ** len(stats)), 2))
+            group[key][1].append(
+                round(math.comb(len(stats), group[key][1][0]) * n ** group[key][1][0] * (37 - n) ** (
+                        len(stats) - group[key][1][0]) / max(a), 2))
             group[key][1].append(round(((group[key][1][0]) * 37 * 100 / (n * len(stats)) - 100), 2))
         else:
             pass
@@ -83,6 +88,7 @@ def n_group_2_3list(group, n):  # Записва във вторият лист 
                 group[key][2][0] = group[key][2][0] + 1
             else:
                 pass
+
     for key in group.keys():
         if len(stats) > 0:
             group[key][2].append(round(group[key][2][0] * 37 * 37 * 100 / (n * n * len(stats)) - 100, 2))
@@ -509,9 +515,6 @@ def numbers2x18_def() -> object:
     n_group_2_3list(numbers2x18, 2)
     n_group_4list(numbers2x18)
     return numbers2x18
-
-
-numbers2x18_def()
 
 
 def color_labels(numb: int, ind: int) -> object:  # Оцветява числата в етикетите от статистиката
