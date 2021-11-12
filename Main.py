@@ -70,7 +70,7 @@ nine_4th: List[List[List[None]]] = [[[None] * 4, [None] * 4, [None] * 4],
 
 def n_group_2_3list(group, n):  # Записва във вторият лист броят на появата в статистиката и процентите
     a = list((math.comb(len(stats), i) * n ** i * (37 - n) ** (len(stats) - i)) for i in range(len(stats)))
-    print(max(a))
+    s: Dict = dict.fromkeys(group.keys(), 0)
     for key, value in group.items():  # В третият лист е броят на съседни появи в статистиката
         group[key][1] = [len(value[0])]
         if len(stats) > 0:  # Изчислява вероятността на получилата се комбинация
@@ -88,7 +88,10 @@ def n_group_2_3list(group, n):  # Записва във вторият лист 
                 group[key][2][0] = group[key][2][0] + 1
             else:
                 pass
-
+        for i in range(len(stats) - group[key][2][0], -1, -1):
+            s[key] = s[key] + (int(37 / n) - 1) ** i * math.comb(abs(len(stats) - 1 - i), group[key][2][0]) * math.comb(
+                i + 1, len(stats) - group[key][2][0] - i)
+    print(s)
     for key in group.keys():
         if len(stats) > 0:
             group[key][2].append(round(group[key][2][0] * 37 * 37 * 100 / (n * n * len(stats)) - 100, 2))
@@ -585,7 +588,7 @@ def statistic_update():
     print(numbers6x6)
     print(numbers3x12)
     print(numbers2x18)
-    print(math.comb(len(stats), 0))
+    print(math.comb(1, 0))
     print(pow(37, 2))
 
     # print(tuple(filter(lambda x: (x != 0), numbers6x6['1-6'][3])))
