@@ -93,6 +93,7 @@ def n_group_2_3list(group, n):  # Записва във вторият лист 
                                                                                   group[key][2][0]) * math.comb(
                 i + 1, len(stats) - group[key][2][0] - i)
     print(s)
+    print(s)
     print([s[i] / 37 ** len(stats) for i in s.keys()])
     for key in group.keys():
         if len(stats) > 0:
