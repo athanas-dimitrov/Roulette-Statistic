@@ -89,11 +89,14 @@ def n_group_2_3list(group, n):  # Записва във вторият лист 
             else:
                 pass
         for i in range(len(stats) - group[key][2][0], -1, -1):
-            s[key] = s[key] + (int(37 / n) - 1) ** i * math.comb(abs(len(stats) - 1 - i), group[key][2][0]) * math.comb(
+            s[key] = s[key] + (n ** (len(stats) - i)) * (37 - n) ** i * math.comb(abs(len(stats) - 1 - i),
+                                                                                  group[key][2][0]) * math.comb(
                 i + 1, len(stats) - group[key][2][0] - i)
     print(s)
+    print([s[i] / 37 ** len(stats) for i in s.keys()])
     for key in group.keys():
         if len(stats) > 0:
+            group[key][2].append(round(s[key] / 37 ** len(stats) * 100, 2))
             group[key][2].append(round(group[key][2][0] * 37 * 37 * 100 / (n * n * len(stats)) - 100, 2))
         else:
             pass
