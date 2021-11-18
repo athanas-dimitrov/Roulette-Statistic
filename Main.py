@@ -166,23 +166,11 @@ def numbers12x3_def():  # Първата стойност е лист от по�
         numbers12x3[key].extend([[], [0], [0], [0]])
     print(numbers12x3)
     for m in range(len(stats)):
-        if stats[m] in range(1, 13):
-            (numbers12x3["1-12"][1].append(m))
-        elif stats[m] in range(13, 25):
-            (numbers12x3["13-24"][1].append(m))
-        elif stats[m] in range(25, 37):
-            (numbers12x3["25-36"][1].append(m))
-        else:
-            pass
-        if stats[m] in range(1, 37, 3):
-            (numbers12x3["1/34"][1].append(m))
-        elif stats[m] in range(2, 37, 3):
-            (numbers12x3["2/35"][1].append(m))
-        elif stats[m] in range(3, 37, 3):
-            (numbers12x3["3/36"][1].append(m))
-        else:
-            pass
-
+        for key in numbers12x3.keys():
+            if stats[m] in numbers12x3[key][0]:
+                numbers12x3[key][1].append(m)
+            else:
+                pass
         n_group_2_3list(numbers12x3, 12)
         n_group_4list(numbers12x3)
         return numbers12x3
@@ -246,25 +234,12 @@ def numbers18x2_def() -> object:  # Първата стойност е лист 
                    'black': [red_numbers]}
     for key in numbers18x2.keys():
         numbers18x2[key].extend([[], [0], [0], [0]])
-    for p in range(len(stats)):
-        if stats[p] in range(1, 19):
-            (numbers18x2["1-18"][1].append(p))
-        elif stats[p] in range(19, 37):
-            (numbers18x2["19-36"][1].append(p))
-        else:
-            pass
-        if stats[p] in range(1, 37, 2):
-            (numbers18x2["odd"][1].append(p))
-        elif stats[p] in range(2, 37, 2):
-            (numbers18x2["even"][1].append(p))
-        else:
-            pass
-        if stats[p] in red_numbers:
-            (numbers18x2["red"][1].append(p))
-        elif stats[p] in black_numbers:
-            (numbers18x2["black"][1].append(p))
-        else:
-            pass
+    for m in range(len(stats)):
+        for key in numbers18x2.keys():
+            if stats[m] in numbers18x2[key][0]:
+                numbers18x2[key][1].append(m)
+            else:
+                pass
 
     n_group_2_3list(numbers18x2, 18)
     n_group_4list(numbers18x2)
@@ -291,47 +266,12 @@ def numbers9x4_def() -> object:
                   'even/black': [list(set(numbers18x2["even"][0]).intersection(set(numbers18x2["black"][0])))]}
     for key in numbers9x4.keys():
         numbers9x4[key].extend([[], [0], [0], [0]])
-    for q in range(len(stats)):
-        if stats[q] in range(1, 10):
-            numbers9x4['1-9'][1].append(q)
-        elif stats[q] in range(10, 19):
-            numbers9x4['10-18'][1].append(q)
-        elif stats[q] in range(19, 28):
-            numbers9x4['19-27'][1].append(q)
-        elif stats[q] in range(28, 37):
-            numbers9x4['28-36'][1].append(q)
-        else:
-            pass
-        if stats[q] in set(range(1, 19)).intersection(set(range(1, 37, 2))):
-            numbers9x4['1-18/odd'][1].append(q)
-        elif stats[q] in set(range(1, 19)).intersection(set(range(2, 37, 2))):
-            numbers9x4['1-18/even'][1].append(q)
-        elif stats[q] in set(range(19, 37)).intersection(set(range(1, 37, 2))):
-            numbers9x4['19-36/odd'][1].append(q)
-        elif stats[q] in set(range(19, 37)).intersection(set(range(2, 37, 2))):
-            numbers9x4['19-36/even'][1].append(q)
-        else:
-            pass
-        if stats[q] in set(range(1, 19)).intersection(set(red_numbers)):
-            numbers9x4['1-18/red'][1].append(q)
-        elif stats[q] in set(range(1, 19)).intersection(set(black_numbers)):
-            numbers9x4['1-18/black'][1].append(q)
-        elif stats[q] in set(range(19, 37)).intersection(set(red_numbers)):
-            numbers9x4['19-36/red'][1].append(q)
-        elif stats[q] in set(range(19, 37)).intersection(set(black_numbers)):
-            numbers9x4['19-36/black'][1].append(q)
-        else:
-            pass
-        if stats[q] in set(range(1, 37, 2)).intersection(set(red_numbers)):
-            numbers9x4['odd/red'][1].append(q)
-        elif stats[q] in set(range(1, 37, 2)).intersection(set(black_numbers)):
-            numbers9x4['odd/black'][1].append(q)
-        elif stats[q] in set(range(2, 37, 2)).intersection(set(red_numbers)):
-            numbers9x4['even/red'][1].append(q)
-        elif stats[q] in set(range(2, 37, 2)).intersection(set(black_numbers)):
-            numbers9x4['even/black'][1].append(q)
-        else:
-            pass
+    for m in range(len(stats)):
+        for key in numbers9x4.keys():
+            if stats[m] in numbers9x4[key][0]:
+                numbers9x4[key][1].append(m)
+            else:
+                pass
 
     n_group_2_3list(numbers9x4, 9)
     n_group_4list(numbers9x4)
@@ -364,91 +304,12 @@ def numbers6x6_def() -> object:
                   '3/36-red': [[3, 9, 12, 18, 21, 27, 30, 36]], '3/36-black': [[6, 15, 24, 33]]}
     for key in numbers6x6.keys():
         numbers6x6[key].extend([[], [0], [0], [0]])
-    for q in range(len(stats)):
-        if stats[q] in range(1, 7):
-            numbers6x6['1-6'][1].append(q)
-        elif stats[q] in range(7, 13):
-            numbers6x6['7-12'][1].append(q)
-        elif stats[q] in range(13, 19):
-            numbers6x6['13-18'][1].append(q)
-        elif stats[q] in range(19, 25):
-            numbers6x6['19-24'][1].append(q)
-        elif stats[q] in range(25, 31):
-            numbers6x6['25-30'][1].append(q)
-        elif stats[q] in range(31, 37):
-            numbers6x6['31-36'][1].append(q)
-        else:
-            pass
-        if stats[q] in set(range(1, 19)).intersection(set(range(1, 37, 3))):
-            numbers6x6['1/16'][1].append(q)
-        elif stats[q] in set(range(1, 19)).intersection(set(range(2, 37, 3))):
-            numbers6x6['2/17'][1].append(q)
-        elif stats[q] in set(range(1, 19)).intersection(set(range(3, 37, 3))):
-            numbers6x6['3/18'][1].append(q)
-        elif stats[q] in set(range(19, 37)).intersection(set(range(1, 37, 3))):
-            numbers6x6['19/34'][1].append(q)
-        elif stats[q] in set(range(19, 37)).intersection(set(range(2, 37, 3))):
-            numbers6x6['20/35'][1].append(q)
-        elif stats[q] in set(range(19, 37)).intersection(set(range(3, 37, 3))):
-            numbers6x6['21/36'][1].append(q)
-        else:
-            pass
-        if stats[q] in set(range(1, 13)).intersection(set(range(1, 37, 2))):
-            numbers6x6['1-12/odd'][1].append(q)
-        elif stats[q] in set(range(1, 13)).intersection(set(range(2, 37, 2))):
-            numbers6x6['1-12/even'][1].append(q)
-        elif stats[q] in set(range(13, 25)).intersection(set(range(1, 37, 2))):
-            numbers6x6['13-24/odd'][1].append(q)
-        elif stats[q] in set(range(13, 25)).intersection(set(range(2, 37, 2))):
-            numbers6x6['13-24/even'][1].append(q)
-        elif stats[q] in set(range(25, 37)).intersection(set(range(1, 37, 2))):
-            numbers6x6['25-36/odd'][1].append(q)
-        elif stats[q] in set(range(25, 37)).intersection(set(range(2, 37, 2))):
-            numbers6x6['25-36/even'][1].append(q)
-        else:
-            pass
-        if stats[q] in set(range(1, 13)).intersection(set(red_numbers)):
-            numbers6x6['1-12/red'][1].append(q)
-        elif stats[q] in set(range(1, 13)).intersection(set(black_numbers)):
-            numbers6x6['1-12/black'][1].append(q)
-        elif stats[q] in set(range(13, 25)).intersection(set(red_numbers)):
-            numbers6x6['13-24/red'][1].append(q)
-        elif stats[q] in set(range(13, 25)).intersection(set(black_numbers)):
-            numbers6x6['13-24/black'][1].append(q)
-        elif stats[q] in set(range(25, 37)).intersection(set(red_numbers)):
-            numbers6x6['25-36/red'][1].append(q)
-        elif stats[q] in set(range(25, 37)).intersection(set(black_numbers)):
-            numbers6x6['25-36/black'][1].append(q)
-        else:
-            pass
-        if stats[q] in set(range(1, 37, 3)).intersection(set(range(1, 37, 2))):
-            numbers6x6['1/34-odd'][1].append(q)
-        elif stats[q] in set(range(1, 37, 3)).intersection(set(range(2, 37, 2))):
-            numbers6x6['1/34-even'][1].append(q)
-        elif stats[q] in set(range(2, 37, 3)).intersection(set(range(1, 37, 2))):
-            numbers6x6['2/35-odd'][1].append(q)
-        elif stats[q] in set(range(2, 37, 3)).intersection(set(range(2, 37, 2))):
-            numbers6x6['2/35-even'][1].append(q)
-        elif stats[q] in set(range(3, 37, 3)).intersection(set(range(1, 37, 2))):
-            numbers6x6['3/36-odd'][1].append(q)
-        elif stats[q] in set(range(3, 37, 3)).intersection(set(range(2, 37, 2))):
-            numbers6x6['3/36-even'][1].append(q)
-        else:
-            pass
-        if stats[q] in set(range(1, 37, 3)).intersection(set(red_numbers)):
-            numbers6x6['1/34-red'][1].append(q)
-        elif stats[q] in set(range(1, 37, 3)).intersection(set(black_numbers)):
-            numbers6x6['1/34-black'][1].append(q)
-        elif stats[q] in set(range(2, 37, 3)).intersection(set(red_numbers)):
-            numbers6x6['2/35-red'][1].append(q)
-        elif stats[q] in set(range(2, 37, 3)).intersection(set(black_numbers)):
-            numbers6x6['2/35-black'][1].append(q)
-        elif stats[q] in set(range(3, 37, 3)).intersection(set(red_numbers)):
-            numbers6x6['3/36-red'][1].append(q)
-        elif stats[q] in set(range(3, 37, 3)).intersection(set(black_numbers)):
-            numbers6x6['3/36-black'][1].append(q)
-        else:
-            pass
+    for m in range(len(stats)):
+        for key in numbers6x6.keys():
+            if stats[m] in numbers6x6[key][0]:
+                numbers6x6[key][1].append(m)
+            else:
+                pass
 
     n_group_2_3list(numbers6x6, 6)
     for key in numbers6x6:  # Записва във вторият лист на втора позиция разликата от нормалното разпределение в
