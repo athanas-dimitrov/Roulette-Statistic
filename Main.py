@@ -118,7 +118,7 @@ def n_group_4list(group):
                     if group[key][1][r - 1] - q == - 1:
                         group[key][4][-1] = group[key][4][-1] + 1
                     else:
-                        group[key][4].extend([group[key][4][r - 1] - q + 1, 1])
+                        group[key][4].extend([group[key][1][r - 1] - q + 1, 1])
                 else:
                     group[key][4] = [i for i in [-q, 1] if i != 0]
                 if group[key][1][-1] == q < len(stats) - 1:
@@ -171,9 +171,9 @@ def numbers12x3_def():  # Първата стойност е лист от по�
                 numbers12x3[key][1].append(m)
             else:
                 pass
-        n_group_2_3list(numbers12x3, 12)
-        n_group_4list(numbers12x3)
-        return numbers12x3
+    n_group_2_3list(numbers12x3, 12)
+    n_group_4list(numbers12x3)
+    return numbers12x3
 
 
 numbers4x9: Dict[tuple, list] = {}
