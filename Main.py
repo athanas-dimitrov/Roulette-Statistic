@@ -79,13 +79,12 @@ def n_group_2_3list(group, n):  # Записва във вторият лист 
         b[key] = [math.comb(len(stats), group[key][2][0])]
         group[key][2] = [len(group[key][1])]
         if len(stats) > 0:  # Изчислява вероятността на получилата се комбинация в %, лист [2][1]
-            group[key][2].append(
-                round(math.comb(len(stats), group[key][2][0]) * n ** group[key][2][0] * (37 - n) ** (
-                        len(stats) - group[key][2][0]) * 100 / (37 ** len(stats)), 2))
+            group[key][2].append(round(math.comb(len(stats), group[key][2][0]) * len(group[key][0][0]) **
+                                       group[key][2][0] * (37 - group[key][0][0]) ** (len(stats) - group[key][2][0]) *
+                                       100 / (37 ** len(stats)), 2))
             # Изчислява получилата се комбинация сравнена с най-вероятната комбинация, при 1.0 съвпада, лист [2][2]
-            group[key][2].append(
-                round(math.comb(len(stats), group[key][2][0]) * n ** group[key][2][0] * (37 - n) ** (
-                        len(stats) - group[key][2][0]) / max(a), 2))
+            group[key][2].append(round(math.comb(len(stats), group[key][2][0]) * n ** group[key][2][0] * (37 - n) **
+                                       (len(stats) - group[key][2][0]) / max(a), 2))
             i_list: List
             i_list = []
             for i in group[key][0]:
