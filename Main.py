@@ -78,11 +78,11 @@ def n_group_2_3list(group, n):  # Записва във вторият лист 
         # group[key][1] = set(group[key][1])
         b[key] = [math.comb(len(stats), group[key][2][0])]
         group[key][2] = [len(group[key][1])]
-        if len(stats) > 0:  # Изчислява вероятността на получилата се комбинация в %
+        if len(stats) > 0:  # Изчислява вероятността на получилата се комбинация в %, лист [2][1]
             group[key][2].append(
                 round(math.comb(len(stats), group[key][2][0]) * n ** group[key][2][0] * (37 - n) ** (
                         len(stats) - group[key][2][0]) * 100 / (37 ** len(stats)), 2))
-            # Изчислява получилата се комбинация сравнена с най-вероятната комбинация, при 1.0 съвпада
+            # Изчислява получилата се комбинация сравнена с най-вероятната комбинация, при 1.0 съвпада, лист [2][2]
             group[key][2].append(
                 round(math.comb(len(stats), group[key][2][0]) * n ** group[key][2][0] * (37 - n) ** (
                         len(stats) - group[key][2][0]) / max(a), 2))
@@ -91,15 +91,15 @@ def n_group_2_3list(group, n):  # Записва във вторият лист 
             for i in group[key][0]:
                 i_list.append(numbers37[i][2][0])
             i_list = [x for x in i_list if x != 0]
-            i_list.sort(reverse=True)
-            print(i_list)
-            print(collections.Counter(i_list))
+            # i_list.sort(reverse=True)
+            # print(i_list)
+            # print(collections.Counter(i_list))
             # Изчислява вероятността на пермутацията вътре в групата от числа, лист [2][3]
             group[key][2].append(round(math.factorial(group[key][2][0]) / math.prod(math.factorial(y) for y in i_list) *
                                        math.factorial(len(i_list)) /
                                        math.prod(math.factorial(z) for z in collections.Counter(i_list).values()) *
-                                       math.comb(group[key][2][0], len(i_list)) / len(group[key][0]) ** group[key][2][
-                                           0], 2))
+                                       math.comb(group[key][2][0], len(i_list)) / len(group[key][0]) **
+                                       group[key][2][0], 2))
             group[key][2].append(round(((group[key][2][0]) * 37 * 100 / (n * len(stats)) - 100), 2))
         else:
             pass
