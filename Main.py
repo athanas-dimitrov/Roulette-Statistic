@@ -247,7 +247,7 @@ def numbers18x2_def() -> object:  # Първата стойност е лист 
     numbers18x2 = {'1-18': [list(range(1, 19, 1))], '19-36': [list(range(19, 37, 1))],
                    'odd': [list(range(1, 37, 2))], 'even': [list(range(2, 37, 2))],
                    'red': [red_numbers],
-                   'black': [red_numbers]}
+                   'black': [black_numbers]}
     for key in numbers18x2.keys():
         numbers18x2[key].extend([[], [0], [0], [0]])
     for m in range(len(stats)):
