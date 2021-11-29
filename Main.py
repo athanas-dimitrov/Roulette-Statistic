@@ -50,6 +50,7 @@ roulette.title("Roulette Statistic")
 roulette.minsize(300, 600)
 
 buttons: List[Button] = list()  # Списък със бутоните на рулетката
+buttons_bet: List[Button] = list()  # Списък с бутоните за залог
 red_numbers: List[int] = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
 black_numbers: List[int] = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35]
 button_text: List[int] = list()  # Списък на числата върху бутоните
@@ -587,14 +588,23 @@ for num in range(37):  # Слага бутоните на числата от р
     buttons.append(Button(roulette, text=str(num), font=("Arial", 10, "bold"), command=lambda n=num: button_num(n)))
     buttons[num].place(relwidth=0.09, relheight=0.03, relx=(0.09 * (((num % 3) + 2) % 3)) * int(num > 0),
                        rely=(0.03 + 0.03 * int((num - 1) / 3)) * int(num > 0))
-
+    buttons_bet.append(Button(roulette, text=str(num), font=("Arial", 8, "bold")))
+    buttons_bet[num].place(relwidth=0.071, relheight=0.025 + 0.05 * int(num == 0),
+                           rely=(0.945 - 0.025 * (((num % 3) + 2) % 3)),
+                           relx=(0.071 + 0.071 * int((num - 1) / 3)) * int(num > 0))
     if num in red_numbers:
         buttons[num].config(bg="red", fg="white")
+        buttons_bet[num].config(bg="red", fg="white")
     elif num in black_numbers:
         buttons[num].config(bg="black", fg="white")
+        buttons_bet[num].config(bg="black", fg="white")
     else:
         buttons[0].config(bg="green", fg="white")
+        buttons_bet[0].config(bg="green", fg="white")
     button_text.append(buttons[num].cget('text'))
+for bet in range(9):
+    buttons_bet.append(Button(roulette))
+    buttons_bet[37 + bet].place(relwidth=0.142, relheight=0.025)
 labels_num_def()
 labels_4x9_12x3_def()
 labels_18x2_def()
@@ -726,18 +736,18 @@ roll_num: Entry = Entry(roulette, relief="sunken", cursor="dot", insertofftime=0
 roll_num.place(relwidth=0.09, relheight=0.03, relx=0.18, rely=0)
 undo_num: Entry = Entry(roulette, relief="sunken", cursor="dot", insertofftime=0, insertwidth=1, justify=CENTER,
                         font=("Arial", 10, "bold"), state=NORMAL)
-undo_num.place(relwidth=0.135, relheight=0.03, relx=0.135, rely=0.80)
+undo_num.place(relwidth=0.135, relheight=0.03, relx=0.135, rely=0.97)
 button_random: Button = Button(roulette, text="Roll", font=("Arial", 9), justify=LEFT, bg="yellow",
                                command=lambda: roll_roulette())
 button_random.place(relwidth=0.09, relheight=0.03, relx=0.09, rely=0)
 button_clear: Button = Button(roulette, text="Clear Stat (" + str(len(stats)) + ")", font=("Arial", 8),
                               command=lambda: clear_stat())
-button_clear.place(relwidth=0.270, relheight=0.03, relx=0, rely=0.90)
+button_clear.place(relwidth=0.270, relheight=0.03, relx=0.540, rely=0.97)
 button_half: Button = Button(roulette, text="Half Stat (" + str(int(len(stats) / 2)) + ")", font=("Arial", 8),
                              command=lambda: half_stat())
-button_half.place(relwidth=0.270, relheight=0.03, relx=0, rely=0.85)
+button_half.place(relwidth=0.270, relheight=0.03, relx=0.270, rely=0.97)
 button_undo: Button = Button(roulette, text='Undo', font=("Arial", 10), command=lambda: undo())
-button_undo.place(relwidth=0.135, relheight=0.03, relx=0, rely=0.80)
+button_undo.place(relwidth=0.135, relheight=0.03, relx=0, rely=0.97)
 button_stat: Button = Button(roulette, text="%", font=("Arial", 10), command=lambda: labels_num_def())
 button_stat.place(relwidth=0.135, relheight=0.03, relx=0.47, rely=0)
 button_4x9_12x3: Button = Button(roulette, text="Calc", font=("Arial", 10), bg='#CA60E2',
