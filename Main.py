@@ -546,7 +546,7 @@ def labels_18x2_def():
                 buttons_calc[int(keys / 2)].place(relwidth=0.19, relheight=0.03, relx=0.28,
                                                   rely=0.514 + 0.03 * int(keys) / 2)
             labels_18x2.append(
-                Label(roulette, text=[list(numbers18x2.keys())][0][keys], font=("Arial", 8), bg="brown",
+                Label(roulette, text=str(list(numbers18x2.keys())[keys]), font=("Arial", 8), bg="brown",
                       fg="white", borderwidth=1, relief="ridge"))
             labels_18x2[keys].place(relwidth=0.19, relheight=0.03, relx=0.47 + 0.19 * (int(keys) % 2 != 0),
                                     rely=0.514 + 0.03 * int(round(keys) / 2))
@@ -602,9 +602,18 @@ for num in range(37):  # Слага бутоните на числата от р
         buttons[0].config(bg="green", fg="white")
         buttons_bet[0].config(bg="green", fg="white")
     button_text.append(buttons[num].cget('text'))
-for bet in range(9):
+for bet in range(12):
     buttons_bet.append(Button(roulette))
-    buttons_bet[37 + bet].place(relwidth=0.142, relheight=0.025)
+    buttons_bet[37 + bet].place(relwidth=0.284 / (1 + int(9 > bet > 2) + 2 * int(bet > 8)), relheight=0.025,
+                                relx=0.071 + bet * int(bet < 3) * 0.284 + (bet - 3) * int(
+                                    9 > bet > 3) * 0.142 + 12 * 0.071 * int(bet > 8),
+                                rely=0.87 - 0.025 * int(9 > bet > 2) + 0.025 * (bet - 8) * int(bet > 8))
+    if 0 <= bet <= 2:
+        buttons_bet[bet + 37].config(bg="#1250EA", fg="white", text=str(list(numbers12x3.keys())[bet]))
+    elif 3 <= bet <= 8:
+        buttons_bet[bet + 37].config(bg="brown", fg="white", text=str(list(numbers18x2.keys())[bet - 3]))
+    else:
+        buttons_bet[bet + 37].config(bg="#1250EA", fg="white", text='3:1')
 labels_num_def()
 labels_4x9_12x3_def()
 labels_18x2_def()
