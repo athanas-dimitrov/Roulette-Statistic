@@ -47,10 +47,10 @@ from typing import List, Dict
 roulette = Tk()
 roulette.geometry("300x900")
 roulette.title("Roulette Statistic")
-roulette.minsize(300, 600)
+roulette.minsize(320, 960)
 
 buttons: List[Button] = list()  # Списък със бутоните на рулетката
-buttons_bet: List[Button] = list()  # Списък с бутоните за залог
+buttons_bet: List[Radiobutton] = list()  # Списък с бутоните за залог
 red_numbers: List[int] = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
 black_numbers: List[int] = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35]
 button_text: List[int] = list()  # Списък на числата върху бутоните
@@ -588,7 +588,8 @@ for num in range(37):  # Слага бутоните на числата от р
     buttons.append(Button(roulette, text=str(num), font=("Arial", 10, "bold"), command=lambda n=num: button_num(n)))
     buttons[num].place(relwidth=0.09, relheight=0.03, relx=(0.09 * (((num % 3) + 2) % 3)) * int(num > 0),
                        rely=(0.03 + 0.03 * int((num - 1) / 3)) * int(num > 0))
-    buttons_bet.append(Button(roulette, text=str(num), font=("Arial", 8, "bold")))
+    buttons_bet.append(Radiobutton(roulette, text=str(num), font=("Arial", 8, "bold"),
+                                   value=num, variable=IntVar(roulette, num), textvariable=num, indicatoron=False))
     buttons_bet[num].place(relwidth=0.071, relheight=0.025 + 0.05 * int(num == 0),
                            rely=(0.945 - 0.025 * (((num % 3) + 2) % 3)),
                            relx=(0.071 + 0.071 * int((num - 1) / 3)) * int(num > 0))
@@ -603,7 +604,9 @@ for num in range(37):  # Слага бутоните на числата от р
         buttons_bet[0].config(bg="green", fg="white")
     button_text.append(buttons[num].cget('text'))
 for bet in range(12):
-    buttons_bet.append(Button(roulette))
+    var = IntVar(roulette, bet)
+    buttons_bet.append(Radiobutton(roulette, font=("Arial", 8, "bold"), value=bet, variable=var,
+                                   indicatoron=False))
     buttons_bet[37 + bet].place(relwidth=0.284 / (1 + int(9 > bet > 2) + 2 * int(bet > 8)), relheight=0.025,
                                 relx=0.071 + bet * int(bet < 3) * 0.284 + (bet - 3) * int(
                                     9 > bet > 3) * 0.142 + 12 * 0.071 * int(bet > 8),
