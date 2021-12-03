@@ -2,6 +2,7 @@
 # and modules which are available in
 # tkinter and ttk module
 from tkinter import *
+from tkinter import messagebox
 from tkinter.ttk import *
 import PyQt5
 
@@ -100,4 +101,4 @@ btn = Button(master,
 btn.pack(pady=10)
 
 # mainloop, runs infinitely
-mainloop()
+master.mainloop()
