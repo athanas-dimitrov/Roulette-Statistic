@@ -585,25 +585,21 @@ def button_num(n):
 
 read_file()
 var_list: List[int] = [-i - 1 for i in range(49)]
-# print(var_list)
-
 var: List[IntVar] = [IntVar(value=-1 - a) for a in range(49)]
-
-
-# var[0] = IntVar(value=-1)
-# for i in range(48):
-# var.append(IntVar(value=-2 - i))
-# var = [IntVar(value=-1 - i) for i in range(49)]
 
 
 def check_state():
     global var
+    if var[37].get() > 0:
+        for i in range(1, 13):
+            buttons_bet[i].select()
     for i in range(49):
         var_list[i] = var[i].get()
         if var[i].get() > 0:
             buttons_bet[var[i].get() - 1].config(fg='black')
         else:
             buttons_bet[abs(var[i].get()) - 1].config(fg='white')
+
     # print(var.get())
     # var_list[var.get() - 1] = var.get() - 1
     # var = 40
