@@ -584,22 +584,35 @@ def button_num(n):
 
 
 read_file()
-var_list: List[int] = [-i - 1 for i in range(49)]
-var: List[IntVar] = [IntVar(value=-1 - a) for a in range(49)]
+var_list: List[int] = [False] * 49
+var: List[BooleanVar] = [BooleanVar(value=False, name=f'PY_VAR{i}') for i in range(49)]
+"""
+for i in range(49):
+    var[i] = BooleanVar()
+"""
+
+
+# var[i] = BooleanVar(value=False) for i in range(49)
 
 
 def check_state():
     global var
-    if var[37].get() > 0:
+    if var[37].get():
         for i in range(1, 13):
             buttons_bet[i].select()
     for i in range(49):
         var_list[i] = var[i].get()
-        if var[i].get() > 0:
-            buttons_bet[var[i].get() - 1].config(fg='black')
+        if var[i].get():
+            if i in black_numbers:
+                buttons_bet[i].config(fg='black')
+            elif i in red_numbers:
+                buttons_bet[i].config(fg='red')
+            elif i == 0:
+                buttons_bet[0].config(fg='green')
+            else:
+                buttons_bet[i].config(fg='brown')
         else:
-            buttons_bet[abs(var[i].get()) - 1].config(fg='white')
-
+            buttons_bet[i].config(fg='white')
     # print(var.get())
     # var_list[var.get() - 1] = var.get() - 1
     # var = 40
@@ -621,14 +634,13 @@ def check_state():
 
 print(var_list)
 for num in range(37):  # Слага бутоните на числата от рулетката и етикетите със процентите от статистиката
-    # var.append(IntVar(value=-num - 2))
+    # var.append(BooleanVar(value=-num - 2))
     # var.set(num)
     buttons.append(Button(roulette, text=str(num), font=("Arial", 10, "bold"), command=lambda n=num: button_num(n)))
     buttons[num].place(relwidth=0.09, relheight=0.03, relx=(0.09 * (((num % 3) + 2) % 3)) * int(num > 0),
                        rely=(0.03 + 0.03 * int((num - 1) / 3)) * int(num > 0))
-    buttons_bet.append(Checkbutton(roulette, text=str(num), font=("Arial", 8, "bold"), onvalue=num + 1,
-                                   offvalue=-num - 1, variable=var[num], indicatoron=False,
-                                   command=lambda: check_state()))
+    buttons_bet.append(Checkbutton(roulette, text=str(num), font=("Arial", 8, "bold"), variable=var[num], onvalue=True,
+                                   offvalue=False, indicatoron=False, command=lambda: check_state()))
     buttons_bet[num].place(relwidth=0.071, relheight=0.025 + 0.05 * int(num == 0),
                            rely=(0.945 - 0.025 * (((num % 3) + 2) % 3)),
                            relx=(0.071 + 0.071 * int((num - 1) / 3)) * int(num > 0))
@@ -644,10 +656,10 @@ for num in range(37):  # Слага бутоните на числата от р
     button_text.append(buttons[num].cget('text'))
 
 for bet in range(12):
-    # var.append(IntVar(value=-bet - 39))
+    # var.append(BooleanVar(value=-bet - 39))
     # var.set(0)
-    buttons_bet.append(Checkbutton(roulette, font=("Arial", 8, "bold"), variable=var[bet + 37], onvalue=bet + 38,
-                                   offvalue=-bet - 38, indicatoron=False, command=lambda: check_state()))
+    buttons_bet.append(Checkbutton(roulette, font=("Arial", 8, "bold"), variable=var[bet + 37], onvalue=True,
+                                   offvalue=False, indicatoron=False, command=lambda: check_state()))
     # var_list[bet + 37] = [var.get()]
     # print(buttons_bet[bet + 37].cget('offvalue'))
     buttons_bet[37 + bet].place(relwidth=0.284 / (1 + int(9 > bet > 2) + 2 * int(bet > 8)), relheight=0.025,
