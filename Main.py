@@ -51,6 +51,7 @@ roulette.minsize(320, 960)
 
 buttons: List[Button] = list()  # Списък със бутоните на рулетката
 buttons_bet: List[Checkbutton] = list()  # Списък с бутоните за залог
+buttons_reset: List[Button] = list()  # Списък с бутони за отмяна на залози
 red_numbers: List[int] = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
 black_numbers: List[int] = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35]
 button_text: List[int] = list()  # Списък на числата върху бутоните
@@ -584,8 +585,8 @@ def button_num(n):
 
 
 read_file()
-var_list: List[int] = [False] * 49
-var: List[BooleanVar] = [BooleanVar(value=False, name=f'PY_VAR{i}') for i in range(49)]
+var_list: List[int] = [False] * 55
+var: List[BooleanVar] = [BooleanVar(value=False, name=f'PY_VAR{i}') for i in range(55)]
 """
 for i in range(49):
     var[i] = BooleanVar()
@@ -600,7 +601,7 @@ def check_state():
     if var[37].get():
         for i in range(1, 13):
             buttons_bet[i].select()
-    for i in range(49):
+    for i in range(55):
         var_list[i] = var[i].get()
         if var[i].get():
             if i in black_numbers:
@@ -655,25 +656,53 @@ for num in range(37):  # Слага бутоните на числата от р
         buttons_bet[0].config(bg="green", fg="white")
     button_text.append(buttons[num].cget('text'))
 
-for bet in range(12):
+for bet in range(18):
     # var.append(BooleanVar(value=-bet - 39))
     # var.set(0)
     buttons_bet.append(Checkbutton(roulette, font=("Arial", 8, "bold"), variable=var[bet + 37], onvalue=True,
                                    offvalue=False, indicatoron=False, command=lambda: check_state()))
     # var_list[bet + 37] = [var.get()]
     # print(buttons_bet[bet + 37].cget('offvalue'))
-    buttons_bet[37 + bet].place(relwidth=0.284 / (1 + int(9 > bet > 2) + 2 * int(bet > 8)), relheight=0.025,
+    buttons_bet[37 + bet].place(relwidth=0.284 / (1 + int(15 > bet > 2) + 2 * int(bet > 14)), relheight=0.025,
                                 relx=0.071 + bet * int(bet < 3) * 0.284 + (bet - 3) * int(
-                                    9 > bet > 3) * 0.142 + 12 * 0.071 * int(bet > 8),
-                                rely=0.87 - 0.025 * int(9 > bet > 2) + 0.025 * (bet - 8) * int(bet > 8))
+                                    9 > bet > 3) * 0.142 + (bet - 9) * int(15 > bet > 9) * 0.142 + 12 * 0.071 * int(
+                                    bet > 14),
+                                rely=0.87 - 0.025 * int(9 > bet > 2) - 0.050 * int(15 > bet > 8) + 0.025 * (
+                                        bet - 14) * int(bet > 14))
     if 0 <= bet <= 2:
         buttons_bet[bet + 37].config(bg="#1250EA", fg="white", text=str(list(numbers12x3.keys())[bet]))
     elif 3 <= bet <= 8:
         buttons_bet[bet + 37].config(bg="brown", fg="white", text=str(list(numbers18x2.keys())[bet - 3]))
+    elif 9 <= bet <= 14:
+        buttons_bet[bet + 37].config(bg="purple", fg="white", text=str(list(numbers6x6.keys())[bet - 9]))
     else:
         buttons_bet[bet + 37].config(bg="#1250EA", fg="white", text='3:1')
-    # var.set(37)
-    # print(var.get())
+
+
+def reset(a):
+    if a == 0:
+        for i in range(37, 40):
+            buttons_bet[i].deselect()
+            buttons_bet[i].config(fg='white')
+    elif a == 1:
+        for j in range(40, 46):
+            buttons_bet[j].deselect()
+            buttons_bet[j].config(fg='white')
+    elif a == 2:
+        for k in range(46, 52):
+            buttons_bet[k].deselect()
+            buttons_bet[k].config(fg='white')
+    else:
+        for m in range(52, 55):
+            buttons_bet[m].deselect()
+            buttons_bet[m].config(fg='white')
+
+
+for res in range(4):
+    buttons_reset.append(Button(roulette, text="C", font=("Arial", 9, "bold"), justify=LEFT, bg="pink", fg="black",
+                                command=lambda n=res: reset(n)))
+    buttons_reset[res].place(relwidth=0.071 + 0.006 * int(res == 3), relheight=0.025, relx=0 + int(res == 3) * 0.923,
+                             rely=0.87 - 0.025 * res * int(res < 3))
 labels_num_def()
 labels_4x9_12x3_def()
 labels_18x2_def()
