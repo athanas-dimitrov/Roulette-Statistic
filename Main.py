@@ -587,20 +587,22 @@ def button_num(n):
 read_file()
 var_list: List[int] = [False] * 55
 var: List[BooleanVar] = [BooleanVar(value=False, name=f'PY_VAR{i}') for i in range(55)]
-"""
-for i in range(49):
-    var[i] = BooleanVar()
-"""
 
 
-# var[i] = BooleanVar(value=False) for i in range(49)
-
-
-def check_state():
+def check_state(ind):
     global var
-    if var[37].get():
-        for i in range(1, 13):
-            buttons_bet[i].select()
+    if ind in range(37, 40):
+        for a1 in range(12):
+            buttons_bet[(a1 + 1) + (ind - 37) * 12].select()
+    elif ind in range(40, 46):
+        for a2 in numbers18x2[list(numbers18x2.keys())[ind - 40]][0]:
+            buttons_bet[a2].select()
+    elif ind in range(46, 52):
+        for a3 in numbers6x6[list(numbers6x6.keys())[ind - 46]][0]:
+            buttons_bet[a3].select()
+    elif ind in range(52, 55):
+        for a4 in numbers12x3[list(numbers12x3.keys())[57 - ind]][0]:
+            buttons_bet[a4].select()
     for i in range(55):
         var_list[i] = var[i].get()
         if var[i].get():
@@ -611,24 +613,10 @@ def check_state():
             elif i == 0:
                 buttons_bet[0].config(fg='green')
             else:
-                buttons_bet[i].config(fg='brown')
+                buttons_bet[i].config(fg='purple', selectcolor='yellow')
         else:
             buttons_bet[i].config(fg='white')
-    # print(var.get())
-    # var_list[var.get() - 1] = var.get() - 1
-    # var = 40
-    # checked.config(selectcolor='white', fg='black')
-    # for chb in buttons_bet:
 
-    # var[40].set(40)
-    # buttons_bet[40].select()
-    # buttons_bet[abs(var.get()) - 1].select()
-    # radio.config(state='active')
-    """
-    for i in var_list:
-        var.set(i - 1)
-        # print(i)
-        """
     print(var)
     print(var_list)
 
@@ -641,7 +629,7 @@ for num in range(37):  # Слага бутоните на числата от р
     buttons[num].place(relwidth=0.09, relheight=0.03, relx=(0.09 * (((num % 3) + 2) % 3)) * int(num > 0),
                        rely=(0.03 + 0.03 * int((num - 1) / 3)) * int(num > 0))
     buttons_bet.append(Checkbutton(roulette, text=str(num), font=("Arial", 8, "bold"), variable=var[num], onvalue=True,
-                                   offvalue=False, indicatoron=False, command=lambda: check_state()))
+                                   offvalue=False, indicatoron=False, command=lambda a=num: check_state(a)))
     buttons_bet[num].place(relwidth=0.071, relheight=0.025 + 0.05 * int(num == 0),
                            rely=(0.945 - 0.025 * (((num % 3) + 2) % 3)),
                            relx=(0.071 + 0.071 * int((num - 1) / 3)) * int(num > 0))
@@ -660,13 +648,12 @@ for bet in range(18):
     # var.append(BooleanVar(value=-bet - 39))
     # var.set(0)
     buttons_bet.append(Checkbutton(roulette, font=("Arial", 8, "bold"), variable=var[bet + 37], onvalue=True,
-                                   offvalue=False, indicatoron=False, command=lambda: check_state()))
+                                   offvalue=False, indicatoron=False, command=lambda a=bet + 37: check_state(a)))
     # var_list[bet + 37] = [var.get()]
     # print(buttons_bet[bet + 37].cget('offvalue'))
-    buttons_bet[37 + bet].place(relwidth=0.284 / (1 + int(15 > bet > 2) + 2 * int(bet > 14)), relheight=0.025,
-                                relx=0.071 + bet * int(bet < 3) * 0.284 + (bet - 3) * int(
-                                    9 > bet > 3) * 0.142 + (bet - 9) * int(15 > bet > 9) * 0.142 + 12 * 0.071 * int(
-                                    bet > 14),
+    buttons_bet[37 + bet].place(relwidth=0.284 * int(bet < 15) / (1 + int(bet > 2)) + 0.077 * int(bet > 14),
+                                relheight=0.025, relx=0.071 + bet * int(bet < 3) * 0.284 + (bet - 3) * int(
+            9 > bet > 3) * 0.142 + (bet - 9) * int(15 > bet > 9) * 0.142 + 12 * 0.071 * int(bet > 14),
                                 rely=0.87 - 0.025 * int(9 > bet > 2) - 0.050 * int(15 > bet > 8) + 0.025 * (
                                         bet - 14) * int(bet > 14))
     if 0 <= bet <= 2:
@@ -682,27 +669,47 @@ for bet in range(18):
 def reset(a):
     if a == 0:
         for i in range(37, 40):
-            buttons_bet[i].deselect()
-            buttons_bet[i].config(fg='white')
+            if var[i].get():
+                for i1 in range(12):
+                    buttons_bet[(i1 + 1) + (i - 37) * 12].deselect()
+                    buttons_bet[(i1 + 1) + (i - 37) * 12].config(fg='white')
+                buttons_bet[i].deselect()
+                buttons_bet[i].config(fg='white')
     elif a == 1:
         for j in range(40, 46):
+            if var[j].get():
+                for a2 in numbers18x2[list(numbers18x2.keys())[j - 40]][0]:
+                    buttons_bet[a2].deselect()
+                    buttons_bet[a2].config(fg='white')
             buttons_bet[j].deselect()
             buttons_bet[j].config(fg='white')
     elif a == 2:
         for k in range(46, 52):
+            if var[k].get():
+                for a3 in numbers6x6[list(numbers6x6.keys())[k - 46]][0]:
+                    buttons_bet[a3].deselect()
+                    buttons_bet[a3].config(fg='white')
             buttons_bet[k].deselect()
             buttons_bet[k].config(fg='white')
-    else:
+    elif a == 3:
         for m in range(52, 55):
+            if var[m].get():
+                for a4 in numbers12x3[list(numbers12x3.keys())[57 - m]][0]:
+                    buttons_bet[a4].deselect()
+                    buttons_bet[a4].config(fg='white')
             buttons_bet[m].deselect()
             buttons_bet[m].config(fg='white')
+    else:
+        for n in range(55):
+            buttons_bet[n].deselect()
+            buttons_bet[n].config(fg='white')
 
 
-for res in range(4):
+for res in range(5):
     buttons_reset.append(Button(roulette, text="C", font=("Arial", 9, "bold"), justify=LEFT, bg="pink", fg="black",
                                 command=lambda n=res: reset(n)))
-    buttons_reset[res].place(relwidth=0.071 + 0.006 * int(res == 3), relheight=0.025, relx=0 + int(res == 3) * 0.923,
-                             rely=0.87 - 0.025 * res * int(res < 3))
+    buttons_reset[res].place(relwidth=0.071 + 0.006 * int(res >= 3), relheight=0.025, relx=0 + int(res >= 3) * 0.923,
+                             rely=0.87 - 0.025 * res * int(res < 3) - 0.025 * (res - 3) * int(res > 3))
 labels_num_def()
 labels_4x9_12x3_def()
 labels_18x2_def()
